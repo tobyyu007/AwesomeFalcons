@@ -1,0 +1,3 @@
+Cropland includes:
+
+Land used for cultivation of crops. The total of areas under ''Arable land'' and ''Permanent crops''.

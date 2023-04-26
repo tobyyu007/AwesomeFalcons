@@ -1,0 +1,6 @@
+Orginally, there are items with the following units:
+- 1000 US$
+- Heads
+- Number
+- Thousand head
+- tonnes
