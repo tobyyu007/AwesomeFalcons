@@ -25,11 +25,11 @@ stringify_coord <- function(coord) {
 }
 
 # sdir is for source directory; tdir is for target directory
-inject_soil_profile <- function(sdir, tdir, lon, lat, model) {
+inject_soil_profile <- function(sdir, tdir, sector, lon, lat, model) {
   sp <- get_isric_soil_profile(lonlat = c(lon, lat))
-  tag <- paste("-lonlat_", stringify_coord(lon), "_", stringify_coord(lat), sep="")
+  tag <- paste("-sector-", as.character(sector), sep="")
   edit_apsimx_replace_soil_profile(
-    file = model,
+    file = paste("_", model, ".apsimx", sep=""),
     src.dir = sdir,
     wrt.dir = tdir,
     soil.profile = sp,
@@ -39,17 +39,17 @@ inject_soil_profile <- function(sdir, tdir, lon, lat, model) {
   )
 }
 
-data <- read.table("centroids.txt", sep = ",")
+data <- read.table("centroids.csv", sep = ",", header=1)
 lll <- lapply(1:nrow(data), function(i) as.numeric(data[i,]))
 print(lll)
 
 
-sdir <- "/Applications/APSIM2022.12.7130.0.app/Contents/Resources/Examples/"
-tdir <- "/Users/toby/Library/Mobile Documents/com~apple~CloudDocs/US Master Classes/Computing for Food Security/Soil"
-model_prefix <- "Maize"
-model_suffix <- ".apsimx"
-model <- paste(model_prefix, model_suffix, sep="")
+sdir <- "./src"
+tdir <- "./output"
+
+models <- c("Maize", "Soybean", "Wheat");
 for (lonlat in lll) {
-  tag <- paste("-lonlat_", stringify_coord(lonlat[1]), "_", stringify_coord(lonlat[2]), sep="")
-  inject_soil_profile(sdir, tdir, lonlat[1], lonlat[2], model)
+  for (model in models) {
+    inject_soil_profile(sdir, tdir, lonlat[1], lonlat[3], lonlat[2], model)
+  }
 }
